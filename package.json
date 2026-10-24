@@ -1,0 +1,42 @@
+{
+  "name": "general-vtb-voice-and-songlist",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "整理 VTuber 音声与歌单的静态站点模板（Astro + SolidJS + SQLite 内容管线）",
+  "scripts": {
+    "dev": "node scripts/content-sync.mjs && cross-env ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "node scripts/content-sync.mjs && cross-env ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "cross-env ASTRO_TELEMETRY_DISABLED=1 node scripts/preview.mjs",
+    "preview:host": "cross-env ASTRO_TELEMETRY_DISABLED=1 node scripts/preview.mjs --host",
+    "astro": "astro",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "audio:prepare": "node scripts/audio-prepare.mjs",
+
+    "content:sync": "node scripts/content-sync.mjs",
+    "content:upgrade": "node scripts/content-cli.mjs upgrade",
+    "content:stats": "node scripts/content-cli.mjs stats",
+    "content:groups": "node scripts/content-cli.mjs groups",
+    "content:list": "node scripts/content-cli.mjs list",
+    "content:add": "node scripts/content-cli.mjs add",
+    "content:rm-examples": "node scripts/content-cli.mjs rm-examples",
+    "content:check": "node scripts/content-cli.mjs check",
+    "content:verify": "node scripts/content-verify.mjs",
+    "content:dump": "node scripts/content-cli.mjs dump",
+    "content:migrate": "node scripts/content-migrate.mjs",
+    "content:seed": "node scripts/seed-defaults.mjs",
+    "content:help": "node scripts/content-cli.mjs help",
+
+    "d1:push": "node scripts/d1-push.mjs",
+    "d1:export": "node scripts/d1-export.mjs"
+  },
+  "dependencies": {
+    "@astrojs/solid-js": "^4.4.1",
+    "astro": "^5.1.0",
+    "solid-js": "^1.9.0"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0"
+  }
+}

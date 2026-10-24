@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="关于 - VTuber 音声与歌单">
+  <div class="page-title">音声板</div>
+  <div class="page-sub">一点关于这座小站的介绍</div>
+  <div class="about-card">
+    <ul>
+      <li><b class="k">贡献者</b><span id="author-edit">在此填写贡献者名单</span></li>
+      <li><b class="k">音档素材来源: </b><span>在此说明音档来源</span></li>
+    </ul>
+    <p style="color:var(--text-3); margin-top:18px; font-size:.9rem;">
+      本站仅为示例模板，不含商业用途，请替换成你自己的声明。
+    </p>
+  </div>
+
+
+  <div class="about-card past-card" id="past-card" style="display:none;">
+    <label class="past-switch">
+      <span class="past-switch__label">往日?<span class="past-hint">说好了,我们要向前看,创造新的回忆的</span></span>
+      <span class="switch">
+        <input type="checkbox" id="past-toggle" aria-label="开启往日" />
+        <span class="switch__track"><span class="switch__thumb"></span></span>
+      </span>
+    </label>
+  </div>
+
+  <script>
+    const UNLOCK = 'vb-easter-unlock';
+    const PAST = 'vb-past';
+    const card = document.getElementById('past-card');
+    const input = document.getElementById('past-toggle') as HTMLInputElement | null;
+    let unlocked = false;
+    try { unlocked = sessionStorage.getItem(UNLOCK) === '1'; } catch {}
+    if (card && input && unlocked) {
+      card.style.display = '';
+      try { input.checked = sessionStorage.getItem(PAST) === '1'; } catch {}
+      input.addEventListener('change', () => {
+        try { sessionStorage.setItem(PAST, input.checked ? '1' : '0'); } catch {}
+        const ev = new CustomEvent('vb-past-change', { detail: input.checked });
+        window.dispatchEvent(ev);
+      });
+    }
+  </script>
+</BaseLayout>

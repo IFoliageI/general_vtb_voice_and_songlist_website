@@ -1,0 +1,59 @@
+# ============================================================
+#  general_vtb_voice_and_songlist_website（通用 VTuber 音声与歌单模板）
+# ============================================================
+
+# ---------- 依赖与构建产物 ----------
+node_modules/
+dist/
+.astro/
+.pnpm-store/
+
+# ---------- 归档与打包（体积大，不入库）----------
+# 历史归档统一放在 _archive/（旧的 Nuxt 归档、离线发布包等）
+_archive/
+# 旧的 Nuxt 原项目归档
+Temp/
+Temp.7z
+# Windows 离线发布包工作目录
+发布包/
+*.zip
+*.7z
+*.tar
+*.tar.gz
+dist.tar
+dist.tar.gz
+site.tar.gz
+
+# ---------- 内容数据库 ----------
+# data/content.db 是内容源，需要【入库】——不要忽略它。
+# 只忽略 SQLite 运行时的临时文件：
+data/*.db-journal
+data/*.db-wal
+data/*.db-shm
+# 本机内容备份，不作为部署产物
+data/backups/
+
+# ---------- 日志与临时文件 ----------
+*.log
+.checks/
+.dev.log
+.prev.log
+.env
+.env.*
+!.env.example
+
+# ---------- 编辑器 / 系统 ----------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---------- 音档 ----------
+# 默认【入库】。如果以后音档体积很大（超过几十 MB），
+# 取消下面几行的注释即可让 git 忽略音频：
+# public/audio/**/*.mp3
+# public/audio/**/*.wav
+# public/audio/**/*.m4a
+# public/audio/**/*.ogg
+# public/audio/**/*.flac

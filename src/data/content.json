@@ -1,0 +1,51 @@
+{
+  "_generated": {
+    "note": "本文件由 scripts/content-sync.mjs 自动生成，请勿手工编辑；内容源是 data/content.db",
+    "source": "data/content.db"
+  },
+  "voice": {
+    "hint": "还没有音声哦，把音频放进 public/audio 对应分组目录就能用啦",
+    "groups": [
+      {
+        "groupName": "greeting",
+        "title": "问候",
+        "voices": []
+      },
+      {
+        "groupName": "lines",
+        "title": "台词",
+        "voices": []
+      },
+      {
+        "groupName": "noise",
+        "title": "叫声",
+        "voices": []
+      }
+    ],
+    "secretGroup": {
+      "groupName": "forgotten",
+      "title": "往日",
+      "voices": []
+    }
+  },
+  "song": {
+    "hint": "还没有歌曲哦，把音频放进 public/audio/songs 就能听啦",
+    "groups": [
+      {
+        "groupName": "song_pop",
+        "title": "流行",
+        "voices": []
+      },
+      {
+        "groupName": "song_folk",
+        "title": "民谣",
+        "voices": []
+      },
+      {
+        "groupName": "song_rock",
+        "title": "摇滚",
+        "voices": []
+      }
+    ]
+  }
+}
