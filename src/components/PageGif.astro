@@ -1,0 +1,104 @@
+---
+import { pageGifs, type PageGif, type PageName } from '../data/site';
+import { assetUrl, basePrefix } from '../lib/asset-url';
+
+// 从 Astro.url.pathname 推导当前页面标识：
+//   /            → index
+//   /request(/)? → request
+//   /about(/)?   → about
+//   其余（含 404 页）→ 404
+// 子路径部署时 pathname 会带部署基路径（如 /repo/request/），先去掉 basePrefix 再判断，
+// 这样 pages: ['index'] 在根路径和子路径部署下都能命中。
+const rawPathname = Astro.url.pathname;
+const pathname =
+  basePrefix && (rawPathname === basePrefix || rawPathname.startsWith(`${basePrefix}/`))
+    ? rawPathname.slice(basePrefix.length) || '/'
+    : rawPathname;
+// 统一去掉末尾斜杠（根路径保持 '/'），让 /request 和 /request/ 都能匹配。
+const normalizedPath = pathname.replace(/\/+$/, '') || '/';
+
+function resolvePageName(path: string): PageName {
+  if (path === '/') return 'index';
+  if (path === '/request') return 'request';
+  if (path === '/about') return 'about';
+  return '404';
+}
+
+const currentPage = resolvePageName(normalizedPath);
+
+// pages 省略 = 所有页面；写了就只在这些页面渲染；空数组 [] = 哪一页都不渲染。
+const visibleGifs = pageGifs.filter((gif) => !gif.pages || gif.pages.includes(currentPage));
+
+// 内联样式：left / top / right / bottom / width / opacity / z-index。
+// width 未配置时用默认 140px；opacity / zIndex 只有显式配置时才写，
+// 未配置时交给浏览器默认层叠（不会盖住抽屉、主题菜单、Toast 等更高的层）。
+function gifStyle(gif: PageGif): string {
+  const parts: string[] = [];
+  if (gif.left != null) parts.push(`left:${gif.left}`);
+  if (gif.top != null) parts.push(`top:${gif.top}`);
+  if (gif.right != null) parts.push(`right:${gif.right}`);
+  if (gif.bottom != null) parts.push(`bottom:${gif.bottom}`);
+  parts.push(`width:${gif.width ?? '140px'}`);
+  if (gif.opacity != null) parts.push(`opacity:${gif.opacity}`);
+  if (gif.zIndex != null) parts.push(`z-index:${gif.zIndex}`);
+  return parts.join(';');
+}
+
+// hideOnMobile / respectReducedMotion 默认 true：加 class，由 global.css 的媒体查询统一隐藏。
+function gifClass(gif: PageGif): string {
+  const classes = ['page-gif'];
+  if (gif.hideOnMobile !== false) classes.push('page-gif--hide-mobile');
+  if (gif.respectReducedMotion !== false) classes.push('page-gif--reduce-motion');
+  return classes.join(' ');
+}
+
+// 站内以 / 开头的路径补部署基路径；http(s) 直链、相对路径、锚点、mailto 等原样使用。
+function gifHref(link: string): string {
+  return link.startsWith('/') ? assetUrl(link) : link;
+}
+
+// 只有 http(s) 直链和协议相对地址（//host/...）算外链，才加 target="_blank"。
+function isExternalLink(link: string): boolean {
+  return /^(https?:)?\/\//i.test(link);
+}
+
+// 先把每一张图需要的 href / 是否外链算好，模板里只做渲染。
+const items = visibleGifs.map((gif) => ({
+  gif,
+  href: gif.link ? gifHref(gif.link) : '',
+  external: gif.link ? isExternalLink(gif.link) : false,
+}));
+---
+
+{items.length > 0 && (
+  <>
+    {items.map((item) =>
+      item.href ? (
+        <a
+          class="page-gif-link"
+          href={item.href}
+          target={item.external ? '_blank' : undefined}
+          rel={item.external ? 'noopener noreferrer' : undefined}
+        >
+          <img
+            class={gifClass(item.gif)}
+            src={assetUrl(item.gif.src)}
+            alt={item.gif.alt ?? 'GIF'}
+            loading="lazy"
+            decoding="async"
+            style={gifStyle(item.gif)}
+          />
+        </a>
+      ) : (
+        <img
+          class={gifClass(item.gif)}
+          src={assetUrl(item.gif.src)}
+          alt={item.gif.alt ?? 'GIF'}
+          loading="lazy"
+          decoding="async"
+          style={gifStyle(item.gif)}
+        />
+      )
+    )}
+  </>
+)}

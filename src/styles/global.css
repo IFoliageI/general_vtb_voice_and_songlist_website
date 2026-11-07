@@ -576,3 +576,11 @@ html.dark .tab:hover { color: var(--accent-300); }
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================
+   页面装饰 GIF（由 src/data/site.ts 的 pageGifs 配置）
+   ============================================================ */
+.page-gif { position: fixed; pointer-events: auto; user-select: none; }
+a.page-gif-link { position: fixed; display: block; }
+@media (max-width: 720px) { .page-gif--hide-mobile { display: none !important; } }
+@media (prefers-reduced-motion: reduce) { .page-gif--reduce-motion { display: none !important; } }

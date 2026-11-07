@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { site, sideLinks, friendLinks } from '../data/site';
 import { imageUrl } from '../lib/media';
 import { assetUrl } from '../lib/asset-url';
+import PageGif from '../components/PageGif.astro';
 
 interface Props {
   title?: string;
@@ -135,6 +136,10 @@ const pageDesc = description ?? site.description;
         <span>©</span><span>{site.footer.content}</span>
       </footer>
     </div>
+
+    {/* 页面装饰 GIF：放在 .app 之外，避免被容器创建层叠上下文影响 fixed 定位；
+        配置见 src/data/site.ts 的 pageGifs（默认空数组，不渲染任何 DOM）。 */}
+    <PageGif />
 
     <script>
       import '../scripts/layout';
